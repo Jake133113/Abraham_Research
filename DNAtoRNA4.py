@@ -35,30 +35,36 @@ def Stop_sequence(sequence):
         if sequence[j:j+3] != 'UAA' and sequence[j:j+3] != 'UAG' and sequence[j:j+3] !='UGA':
             j+=3
         elif sequence[j:j+3] == 'UAA':
-            print('Final Sequence: ', sequence[:j])
             final_sequence = sequence[:j]
             break
         elif sequence[j:j+3] == 'UAG':
-            print('Final Sequence: ', sequence[:j])
             final_sequence = sequence[:j]
             break
         elif sequence[j:j+3] == 'UGA':
-            print('Final Sequence: ', sequence[:j])
             final_sequence = sequence[:j]
             break
+    return final_sequence
 
-print(Stop_sequence(RNA_seq_nostart))
+
+test1 = Stop_sequence(RNA_seq_nostart)
     
-#Adding in an error detection and possible correction if the length of the protein sequence isn't exactly 1/3 of the coding sequence
-
-if len(final_sequence) == 3*len(protein_sequence):
+if len(test1) == 3*len(protein_sequence):
     print("The coding sequence is the correct length for the resulting protein sequence")
+    print("Final sequence is: ", test1)
 else:
-    print('The sequence was the incorrect length. This code will try adding the start codon to the beginning and check the length.')
-    try: 
-        new_seq = Stop_sequence(RNA_seq)
-        print('The sequence is now the correct length with a start codon added to the beginning. ')
-    except len(new_seq) != 3*len(protein_sequence):
-        print('The codon sequence is still the wrong length. Please check your inputs for errors.') 
-        
-        
+    print('The sequence was the incorrect length. This code will now try adding the start codon right before the first detection of the start codon because the start codon also codes for the amino acid "M". If that does not work, it will try adding the start codon to the very beginning.')
+
+start_codon = 'AUG'
+test2 = Stop_sequence('AUG' + RNA_seq_nostart)
+test3 = Stop_sequence(RNA_seq)
+
+if len(test2) == 3*len(protein_sequence):
+        print('The sequence is now the correct length with a start codon added right before the first occurance of "AUG". ')
+        print('Final sequence is: ', test2)
+elif len(test3) == 3*len(protein_sequence):
+        print('The sequence is now the correct length with a start codon added right in the beginning. ')
+        print('Final sequence is: ', test3)
+else:
+        print('The codon sequence is still the wrong length.') 
+
+
