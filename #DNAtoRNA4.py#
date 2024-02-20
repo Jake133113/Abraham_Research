@@ -1,5 +1,5 @@
 #Python script to get convert the DNA sequences in RefSeq to RNA Sequences. In this case, we are also give the 
-#amino acid sequence to verify the length. This version includes an error correction for a false "start"
+#amino acid sequence to verify the length 
 
 import re
 
@@ -52,7 +52,7 @@ if len(test1) == 3*len(protein_sequence):
     print("The coding sequence is the correct length for the resulting protein sequence")
     print("Final sequence is: ", test1)
 else:
-    print('The sequence was the incorrect length. This code will now try adding the start codon right before the first detection of the start codon. If that does not work, it will try adding the start codon to the very beginning. Then, it will try taking the second instance of the start codon as the effective one.')
+    print('The sequence was the incorrect length. This code will now try adding the start codon right before the first detection of the start codon because the start codon also codes for the amino acid "M". If that does not work, it will try adding the start codon to the very beginning.')
 
 start_codon = 'AUG'
 test2 = Stop_sequence('AUG' + RNA_seq_nostart)
@@ -61,24 +61,5 @@ test3 = Stop_sequence(RNA_seq)
 if len(test2) == 3*len(protein_sequence):
         print('The sequence is now the correct length with a start codon added right before the first occurance of "AUG". ')
         print('Final sequence is: ', test2)
-        condition = True
 elif len(test3) == 3*len(protein_sequence):
-        print('The sequence is now the correct length with a start codon added right in the beginning. ')
-        print('Final sequence is: ', test3)
-        condition = True
-else:
-        print('The codon sequence is still the wrong length. The program will now test each instance of "AUG" as the start codon until it finds a length match')
-        condition = False
-
-#Looping through the instances of 'AUG' to see which one is the start.
-if condition == False:
-    for i in range(RNA_seq.count('AUG')):
-        index_i = RNA_seq.index('AUG')
-        RNA_nostart = RNA_seq[index_i:]
-        new_seq = Stop_sequence(RNA_nostart)
-        if len(new_seq) == 3*len(protein_sequence):
-            print('The effective start codon is the', i+1, 'th occurance of "AUG"')
-            print('The Final Sequence is: ', new_seq)
-            break
-        else:
-            RNA_seq = RNA_seq[index_i+3:]
+        print('The sequence is now the cor
