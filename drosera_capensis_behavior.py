@@ -9,9 +9,9 @@ import os
 Behavior of the plant depends on the location of the food. Use the following parameters for different 
 food locations and spreads:
 
-1. Food spread out around ~0.75*L: gamma = 2, lambda_ = 10, mu = 0.75*L, sigma = 0.25*L
-2. Food concentrated at ~0.75*L: gamma = 1, lambda_ = 35, mu = 0.75*L, sigma = 0.05*L
-2. Food concentrated at the tip: gamma = 0.5, lambda_ = 120, mu = L, sigma = 0.05*L
+1. Food spread out around ~0.75*L: gamma = 2, lambda_ = 5, mu = 0.75*L, sigma = 0.25*L
+2. Food concentrated at ~0.75*L: gamma = 1, lambda_ = 5, mu = 0.75*L, sigma = 0.05*L
+3. Food concentrated at the tip: gamma = 0.5, lambda_ = 140, mu = L, sigma = 0.05*L
 
 '''
 
@@ -22,8 +22,8 @@ dt = 0.01         # Time step
 T = 3.0           # Total simulation time
 steps = int(T / dt)
 
-gamma = 2      # Proprioception strength 
-lambda_ = 10     # Food sensitivity strength
+gamma = 0.5      # Proprioception strength 
+lambda_ = 140     # Food sensitivity strength
 s = np.linspace(0, L, N)
 ds = s[1] - s[0]
 
@@ -31,8 +31,8 @@ ds = s[1] - s[0]
 curvature = 0.01 * np.random.randn(N)
 
 # Food distribution: smooth Gaussian centered at mu
-mu = 0.75*L #Location of the center of the food; 
-sigma = 0.25 * L #Standard deviation of the food; how spread out it is
+mu = L #Location of the center of the food; 
+sigma = 0.05 * L #Standard deviation of the food; how spread out it is
 f = np.exp(-((s - mu)**2) / (2 * sigma**2))
 
 #gaussian distribution of food centered around the location of the food (mu)
@@ -52,7 +52,7 @@ def compute_theta(curvature, ds):
 
 #simple differential equation inspired from graviproprioception paper, using food as a gaussian
 def compute_dCdt(curvature, f, gamma, lambda_):
-    return lambda_ * f - gamma * curvature
+    return lambda_ * food(s, mu, sigma) - gamma * curvature
 
 #detect when the plant touches itself
 def detect_repeat(arr, sensitivity):
